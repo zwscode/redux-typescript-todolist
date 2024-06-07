@@ -9,25 +9,28 @@ import {
     deleteTodoAsync,
 	selectTodos,
 } from "./todoSlice";
+
+import { selectUser } from "../user/userSlice";
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import { RootState } from "../../app/store"; // Assuming you have a RootState type defined
 
-import {Todo} from "../../type/todo"
+import {Todo} from "../../type/todo";
+import { Route, Navigate } from 'react-router-dom';
 
 const Todolist: React.FC = () => {
     const dispatch = useAppDispatch();
     const todos = useAppSelector(selectTodos);
-
+    const userInfo = useAppSelector(selectUser);
     const [newTodo, setNewTodo] = useState<string>("");
     const [editId, setEditId] = useState<string | null>(null);
     const [editInput, setEditInput] = useState<string>("");
 
     useEffect(() => {
-        dispatch(getTodosAsync());
+        dispatch(getTodosAsync({token: userInfo.token, userid: userInfo.userid}));
     }, [dispatch]);
 
-    const handleSubmit = () => {
-        dispatch(createTodoAsync({ content: newTodo }));
+    const handleCreateTodo = () => {
+        dispatch(createTodoAsync({token: userInfo.token, payload: { content: newTodo }}));
         setNewTodo("");
     };
 
@@ -35,7 +38,7 @@ const Todolist: React.FC = () => {
         if (editId === id) {
             setEditInput("");
             setEditId(null);
-            dispatch(updateTodoAsync({ id: id, content: editInput }));
+            dispatch(updateTodoAsync({token: userInfo.token, payload: { id: id, content: editInput }}));
         } else {
             setEditId(id);
             const todo = todos.find((todo) => todo.id === id);
@@ -46,7 +49,7 @@ const Todolist: React.FC = () => {
     };
 
     const handleDelete = (id: string) => {
-        dispatch(deleteTodoAsync({ id }));
+        dispatch(deleteTodoAsync({ token: userInfo.token, id: id }));
     };
 
 	return (
@@ -58,7 +61,7 @@ const Todolist: React.FC = () => {
                         setNewTodo(event.target.value);
                     }}
                 />
-                <button onClick={handleSubmit}>submit</button>
+                <button onClick={handleCreateTodo}>submit</button>
             </div>
 
             <div className="list-container">

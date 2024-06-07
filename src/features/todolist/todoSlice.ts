@@ -2,40 +2,43 @@ import {Todo} from '../../type/todo';
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { getTodos, createTodo, updateTodo, deleteTodo } from "../../API/todoAPI";
 import { RootState, AppThunk } from '../../app/store';
+import { selectUser } from '../user/userSlice';
+import { useAppSelector } from '../../app/hooks';
 
 interface TodoState {
     todos: Todo[];
 }
 
-const getTodosAsync = createAsyncThunk<Todo[]>(
+
+
+const getTodosAsync = createAsyncThunk<Todo[], {token:string, userid:string}>(
     "todos/getTodos",
-    async () => {
-        const response = await getTodos();
+    async ({token, userid}) => {
+        const response = await getTodos(token, userid);
         return response;
     }
 );
 
-const createTodoAsync = createAsyncThunk<Todo, Omit<Todo, 'id'>>(
+const createTodoAsync = createAsyncThunk<Todo, {token: string, payload: Omit<Todo, 'id'>}>(
     "todos/createTodo",
-    async (payload) => {
-        const response = await createTodo(payload);
+    async (param) => {
+        const response = await createTodo(param.token, param.payload);
         return response;
     }
 );
 
-const updateTodoAsync = createAsyncThunk<Todo, { id: string; content: string }>(
+const updateTodoAsync = createAsyncThunk<Todo, {token: string, payload: { id: string; content: string }}>(
     "todos/updateTodo",
-    async (payload) => {
-        const response = await updateTodo(payload.id, { content: payload.content });
+    async (param) => {
+        const response = await updateTodo(param.token, param.payload.id, { content: param.payload.content });
         return response;
     }
 );
 
-const deleteTodoAsync = createAsyncThunk<string, { id: string }>(
+const deleteTodoAsync = createAsyncThunk<string, { token: string, id: string }>(
     "todos/deleteTodo",
-    async (payload) => {
-        const id = payload.id;
-        await deleteTodo(id);
+    async ({token, id}) => {
+        await deleteTodo(token, id);
         return id;
     }
 );

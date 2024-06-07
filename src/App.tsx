@@ -3,6 +3,14 @@ import logo from './logo.svg';
 import { Counter } from './features/counter/Counter';
 import './App.css';
 import TodoList from './features/todolist/todolist'
+import Login from './features/login/login'
+import { useAppSelector, useAppDispatch } from './app/hooks';
+import { PageType } from './type/myType';
+import { useEffect } from 'react';
+import { selectUser } from './features/user/userSlice';
+import { LoginStatus } from './type/myType';
+
+import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
 
 // function App() {
 //   return (
@@ -57,9 +65,22 @@ import TodoList from './features/todolist/todolist'
 // }
 
 function App() {
+
+  const ProtectedRoute = () => {
+    const userInfo = useAppSelector(selectUser);
+    const isAuthenticated = userInfo.loginStatus == LoginStatus.LOGGED_IN;
+    return isAuthenticated ? <Outlet /> : <Navigate to="/login" />;
+  };
+
   return (
     <div>
-      <TodoList/>
+      <Routes>
+        <Route path="/" element={<Navigate to="/login" replace />} />
+        <Route path="/login" element={<Login />} />
+        <Route element={<ProtectedRoute />}>
+          <Route path="/todolist" element={<TodoList />} />
+        </Route>
+      </Routes>
     </div>
   );
 }
