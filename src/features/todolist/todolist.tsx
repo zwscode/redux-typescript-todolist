@@ -10,7 +10,7 @@ import {
 	selectTodos,
 } from "./todoSlice";
 
-import { selectUser } from "../user/userSlice";
+import { selectUser } from "../login/loginSlice";
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import { RootState } from "../../app/store"; // Assuming you have a RootState type defined
 

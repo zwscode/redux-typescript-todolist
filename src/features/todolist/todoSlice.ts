@@ -2,7 +2,7 @@ import {Todo} from '../../type/todo';
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { getTodos, createTodo, updateTodo, deleteTodo } from "../../API/todoAPI";
 import { RootState, AppThunk } from '../../app/store';
-import { selectUser } from '../user/userSlice';
+import { selectUser } from '../login/loginSlice';
 import { useAppSelector } from '../../app/hooks';
 
 interface TodoState {

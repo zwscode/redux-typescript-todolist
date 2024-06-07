@@ -2,7 +2,7 @@ import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import "./login.css"
 import {PayloadAction} from '@reduxjs/toolkit'
 import {useState} from 'react'
-import { userRegister, userLogin, selectUser } from '../user/userSlice';
+import { userRegister, userLogin, selectUser } from './loginSlice';
 import { LoginStatus } from '../../type/myType';
 import { useNavigate } from 'react-router-dom';
 import { LoginRes } from "../../type/myType";

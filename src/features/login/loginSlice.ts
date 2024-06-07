@@ -67,7 +67,7 @@ const userLogin = createAsyncThunk<LoginRes, RegisterLoginInfo>(
 	}
 )
 
-const userSlice = createSlice({
+const loginSlice = createSlice({
     name: "user",
     initialState,
     reducers: {
@@ -84,23 +84,18 @@ const userSlice = createSlice({
 			
 		})
 		.addCase(userLogin.fulfilled, (state, action: PayloadAction<LoginRes>) => {
-			// state.name = action.payload.name;
-			// state.password = action.payload.password;
-			// state.token = action.payload.token;
-			console.log("login reducer print", action.payload);
 			if (action.payload.result === "success") {
 				state.username = action.payload.username;
 				state.token = action.payload.token;
 				state.userid = action.payload.userid;
-				console.log("login reducer print settting loginstatus to in");
 				state.loginStatus = LoginStatus.LOGGED_IN;
 			}
 		});
 	}
 });
 
-export const selectUser = (state: RootState): UserInfo => state.user;
+export const selectUser = (state: RootState): UserInfo => state.login;
 
 export { userRegister, userLogin };
 
-export default userSlice.reducer;
+export default loginSlice.reducer;

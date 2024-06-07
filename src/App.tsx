@@ -7,7 +7,7 @@ import Login from './features/login/login'
 import { useAppSelector, useAppDispatch } from './app/hooks';
 import { PageType } from './type/myType';
 import { useEffect } from 'react';
-import { selectUser } from './features/user/userSlice';
+import { selectUser } from './features/login/loginSlice';
 import { LoginStatus } from './type/myType';
 
 import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
